@@ -38,9 +38,9 @@ Some notes:
 
 **MIGHT** requirements (if you satisfy this requirement you are allowed to fail two of the previous three **should** requirements; if you do not satisfy it, no penalty):
 
-- Use only one public IP. In that case, external users cannot access the database server directly. It should be possible to contact the webserver using the public IP on port 8082, and the webserver should be able to connect to the database server using the database server private IP and port 3306.
+- Use only one public IP. In that case, external users cannot access the database server directly. It should be possible to contact the webserver using the public IP on port 8082, and the webserver should be able to connect to the database server using the database server private IP (because they are deployed on the same network) and port 3306.
 
-    - This requirement has been added to make you think how to configure the databaswe server if it does not have a public IP (you can use the webserver as [jump server](https://en.wikipedia.org/wiki/Jump_server). You can ask me during the week for help on how to configure it if you want to satisfy this requirement.
+    - This requirement has been added to make you think how to configure the database server if it does not have a public IP. You can use the webserver as [jump server](https://en.wikipedia.org/wiki/Jump_server). You can ask me during the week for help on how to configure it if you want to satisfy this requirement.
 
 ## Part 2. Continuous Delivery 
 
