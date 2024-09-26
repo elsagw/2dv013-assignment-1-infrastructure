@@ -15,7 +15,7 @@ Some notes:
 - This [project](https://gitlab.lnu.se/dipeab/2dv013-ht24-a1-provided) contains the code that we saw during the workshops. It already includes: 
     - The code that creates a server is provided in the *deploy/terraform* folder and it does not  hardcode private information. 
     - See on the file variables.tf in the *deploy/terraform* folder the minimum set of variables that you must use; otherwise, the users  will not be able to execute your code. Of course, you can use more variables to make the Terraform code more readable and cleaner.
-    - The conde that installs a webserver, copies an HTML file as its data, and changes the listening port to 8080 is provided in folder *deploy/ansible*. 
+    - The code that installs a webserver, copies an HTML file as its data, and changes the listening port to 8080 is provided in folder *deploy/ansible*. 
 - Rule to follow: Do not hardcode any of your private information in those files. The users (and the assignment Examiner) have their own credentials for the provider “Openstack.”.
 - The execution of deploy.sh should also output the public IP addresses to connect to the webserver and to the mysql server. It is OK if you simply use the Terraform “output” value.
 - After executing the deploy.sh, a simple “terraform destroy” command should tear down the whole infrastructure.
