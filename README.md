@@ -26,14 +26,14 @@ Some notes:
 ### Evaluable aspects
 **MUST** requirements (failing to satisfy one of these will fail the assignment):
 
-- The two servers deploy and are accessible. The webserver on port 8082 and the database server on port 3306
-- No user-specific information is hardcoded on your code 
-- No username/credentials or your private_key is pushed to the repository
+- The two servers deploy and are accessible. The webserver on port 8082 and the database server on port 3306.
+- No user-specific information is hardcoded on your code.
+- No username/credentials or your private_key is pushed to the repository.
 
 **SHOULD** requirements (you can fail one of them, but failing to satisfy two of these will fail the assignment):
 
-- It should not be possible to contact the database server on port 8082 (otherwise it has more ports opened than necessary)
-- It should not be possible to contact the webserver cannot be contacted on port 3306 (otherwise it has more ports opened than necessary)
+- It should not be possible to contact the database server on port 8082 (otherwise it has more ports opened than necessary).
+- It should not be possible to contact the webserver cannot be contacted on port 3306 (otherwise it has more ports opened than necessary).
 - The port 8082 is written only once in your code. In the project provided it appears twice, once in the terraformm code and another time in the ansible code in *group_vars/all.yml* and you have to fix that weakness in the code.
 
 **MIGHT** requirements (if you satisfy this requirement you are allowed to fail two of the previous three **should** requirements; if you do not satisfy it, no penalty):
