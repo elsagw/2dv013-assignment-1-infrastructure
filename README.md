@@ -5,6 +5,7 @@
 
 
 Push to this repository on gitlab.lnu.se the necessary code for Terraform, Ansible, and a shell script called deploy.sh that, **by executing only the deploy.sh script** will allo the user to: 
+
 1.  create a functional webserver on cscloud that can be accessed through a Public IP on port 8082 and that returns the webpage whose HTML code is provided together with this text **text by executing only the deploy.sh script**. 
 
 1. create a second server with a mysql database that can be accessed through a public IP and port 3306 (this is the default for MySQL).
