@@ -4,7 +4,7 @@
 ## Part 1. - Platforms for automatic server configuration
 
 
-Push to your project repository on gitlab.lnu.se the necessary code for Terraform, Ansible, and a shell script called deploy.sh that, **by by executing only the deploy.sh script** will allow the user to: 
+Push to your project repository on gitlab.lnu.se the necessary code for Terraform, Ansible, and a shell script called deploy.sh that, **by executing only the deploy.sh script** will allow the user to: 
 
 1. Create two functional webservers (`webserver1` and `webserver2`) on Cumulus that listen on the default port 80 and return the content that you prefer. To make the evaluation of the presence of two servers easier, make sure that the content is slightly different from each server.
 
