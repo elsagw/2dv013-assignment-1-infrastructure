@@ -23,6 +23,9 @@ Push to your project repository on gitlab.lnu.se the necessary code for Terrafor
 
     - See the file variables.tf in the *deploy/terraform* folder. There are some variables there. It is recommended that you keep all of them for clarity of the code, but the bare minimum that you must keep is the `identity_file` and `key_name` (more information about them later). Otherwise, the users will not be able to execute your code. Of course, you can use more variables to make the Terraform code more readable and cleaner. 
 
+The following figure shows the difference between the system developed in the provided project and how is the target system of this assignment
+![Current system and required extension](https://gitlab.lnu.se/2dv013/content/course-material/images/-/blob/main/current-and-expected-system.png)
+
 - Rule to follow: Do not hardcode any of your private information in those files. The users (and the assignment Examiner) have their own credentials for the provider “openstack.”
 - The execution of deploy.sh should also output the public IP addresses to connect to your load balancer and the private IPs of the webservers. It is OK if you simply use the Terraform “output” value.
 - After executing the deploy.sh, a simple “terraform destroy” command should tear down the whole infrastructure.
