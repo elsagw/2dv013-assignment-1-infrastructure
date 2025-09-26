@@ -25,8 +25,6 @@ Push to your project repository on gitlab.lnu.se the necessary code for Terrafor
 
 - This [figure](https://gitlab.lnu.se/2dv013/content/course-material/-/blob/main/images/current-and-expected-system.png) shows the difference between the system developed in the provided [project](https://gitlab.lnu.se/dipeab/2dv013-ht25-a1-provided) and how the target system of this assignment must be.
 
-<img src="https://gitlab.lnu.se/2dv013/content/course-material/-/blob/main/images/current-and-expected-system.png"  />
-
 
 - Rule to follow: Do not hardcode any of your private information in those files. The users (and the assignment Examiner) have their own credentials for the provider “openstack.”
 - The execution of deploy.sh should also output the public IP addresses to connect to your load balancer and the private IPs of the webservers. It is OK if you simply use the Terraform “output” value.
