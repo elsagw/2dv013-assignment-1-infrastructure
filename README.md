@@ -5,6 +5,7 @@
 
 
 Push to your project repository on gitlab.lnu.se the necessary code for Terraform, Ansible, and a shell script called deploy.sh that, **by by executing only the deploy.sh script** will allow the user to: 
+
 1. Create two functional webservers (`webserver1` and `webserver2`) on Cumulus that listen on the default port 80 and return the content that you prefer **by executing only the deploy.sh script**. To let me check more easily that there are two webservers, make sure that the content is slightly different from each server; you have a simple example of how to do it in the following notes
 
 1. Create a server with an nginx that listens on port 8082 and acts as a load balancer following the Round-Robin method for the two webservers above.
