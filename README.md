@@ -10,7 +10,7 @@ Push to your project repository on gitlab.lnu.se the necessary code for Terrafor
 
 1. Create a server with an nginx that listens on port 8082 and acts as a load balancer following the Round-Robin method for the two webservers above.
 
-### Some notes:
+### Some notes and help:
 
 - This [project](https://gitlab.lnu.se/dipeab/2dv013-ht25-a1-provided) contains the code that we saw during the workshops. It includes: 
     - The Terraform code that creates a server is provided in the *deploy/terraform* folder, and it does not hardcode private information. 
