@@ -23,7 +23,7 @@ Push to your project repository on gitlab.lnu.se the necessary code for Terrafor
 
     - See the file variables.tf in the *deploy/terraform* folder. There are some variables there. It is recommended that you keep all of them for clarity of the code, but the bare minimum that you must keep is the `identity_file` and `key_name` (more information about them later). Otherwise, the users will not be able to execute your code. Of course, you can use more variables to make the Terraform code more readable and cleaner. 
 
-The following figure shows the difference between the system developed in the provided project and how is the target system of this assignment
+- This [figure](https://gitlab.lnu.se/2dv013/content/course-material/-/blob/main/images/current-and-expected-system.png) shows the difference between the system developed in the provided [project](https://gitlab.lnu.se/dipeab/2dv013-ht25-a1-provided) and how the target system of this assignment must be.
 
 <img src="https://gitlab.lnu.se/2dv013/content/course-material/-/blob/main/images/current-and-expected-system.png"  />
 
