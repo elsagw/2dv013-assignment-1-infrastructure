@@ -19,12 +19,12 @@ Push to your project repository on gitlab.lnu.se the necessary code for Terrafor
     - The Terraform and Ansible execution are connected. The connection between the two tools is described in the file *deploy/terraform/04-configure.tf*. On this file:
         - The inventory file is created by Terraform (lines 2-9)
         - The `ansible-playbook` is called by Terraform in the "ansible-deploy" element, which is a null_resource with a local-exec inside (lines 32-48, commented in case you prefer another way to make the sequence of Terraform and Ansible execution)
-        - Even if we write that the `ansible-playbook` playbook depends on the creation of a server instance, it happens that Terraform sees the instance as *Running* even if it is still booting. In that case, the instance has not started its SSH server yet, and Ansible receives an error when it tries to connect to configure. There are several ways to address this "inconvenience", either by modifying the Ansible code or the Terraform code. You see an example to address the "inconvenience" in Terraform code in the wait_ssh block (lines 12-29)
+        - Even if we write that the `ansible-playbook` playbook depends on the creation of a server instance, it happens that Terraform sees the instance as *Running* even if it is still booting. In that case, the instance has not started its SSH server yet, and Ansible ends with an error when it tries to connect to configure. There are several ways to address this "inconvenience", either by modifying the Ansible code or the Terraform code. You see an example to address the "inconvenience" in Terraform code in the wait_ssh block (lines 12-29)
 
     - See the file variables.tf in the *deploy/terraform* folder. There are some variables there. It is recommended that you keep all of them for clarity of the code, but the bare minimum that you must keep is the `identity_file` and `key_name` (more information about them later). Otherwise, the users will not be able to execute your code. Of course, you can use more variables to make the Terraform code more readable and cleaner. 
 
-- Rule to follow: Do not hardcode any of your private information in those files. The users (and the assignment Examiner) have their own credentials for the provider “OpenStack.”
-- The execution of deploy.sh should also output the public IP addresses to connect to your. It is OK if you simply use the Terraform “output” value.
+- Rule to follow: Do not hardcode any of your private information in those files. The users (and the assignment Examiner) have their own credentials for the provider “openstack.”
+- The execution of deploy.sh should also output the public IP addresses to connect to your load balancer and the private IPs of the webservers. It is OK if you simply use the Terraform “output” value.
 - After executing the deploy.sh, a simple “terraform destroy” command should tear down the whole infrastructure.
 - The purpose of asking for the deploy.sh script is to give you the freedom to handle the ansible-playbook command inside Terraform execution (as in the commented lines in deploy/terraform/04-configure.tf) or as an independent command after the “terraform apply -auto-approve” has provisioned the infrastructure.
 - Instructions for configuring nginx as a load balancer [here](https://nginx.org/en/docs/http/load_balancing.html) (both short and detailed enough for our purposes) and, if you are interested, more detailed [here](https://docs.nginx.com/nginx/admin-guide/load-balancer/http-load-balancer/#proxy-http-traffic-to-a-group-of-servers).
@@ -40,13 +40,13 @@ Push to your project repository on gitlab.lnu.se the necessary code for Terrafor
 
 - No user-specific information is hardcoded in your code; for instance, the name of your key or the name of your identity file .pem. This is important because in your future projects, you will not be the only developer involved, so do not push to the repository any information that is specific to you. This is why we needed some variables above. 
 
-- No username/credentials or your private_key is pushed to the repository
+- No username/credentials or your private_key is pushed to the repository.
 
 **SHOULD** requirements (you can fail one of them, but failing to satisfy two of these will fail the assignment):
 
-- It should not be possible to contact the webservers server on port 8082 (otherwise they have more ports opened than necessary)
+- It should not be possible to contact the webservers server on port 8082 (otherwise they have more ports opened than necessary).
 
-- It should not be possible to contact the load balancer on port 80 (otherwise, it has more ports opened than necessary)
+- It should not be possible to contact the load balancer on port 80 (otherwise, it has more ports opened than necessary).
 
 - The numbers 80 and 8082 for the ports to use are written only once in your code. For example, in the project provided, port 80 appears twice, once in the Terraform code to open the port and again in the inventory template; you have to fix that weakness in the code.
 
