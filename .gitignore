@@ -1,0 +1,43 @@
+# Terraform files
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfplan
+.terraform/
+.terraform.lock.hcl
+
+# Ansible files
+*.retry
+inventory.bak
+inventory-generated
+
+# SSH keys (if any are created)
+*.pem
+*.key
+id_rsa*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.log
+temp/
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# Backup files
+*.backup
+*~
+
+.exempel.playbook.md
