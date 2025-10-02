@@ -1,7 +1,3 @@
-# Terraform configuration file for OpenStack
-# This configuration creates a network, subnet, router, security group,
-# three compute instances (2 webservers + 1 loadbalancer), and associates floating IPs
-
 # Define required providers
 terraform {
   required_version = ">= 0.14.0"

@@ -52,37 +52,3 @@ output "ansible_inventory_info" {
     }
   }
 }
-
-// vad man kommer se efter terraform apply
-# Outputs:
-
-# ansible_inventory_info = {
-#   "loadbalancer" = {
-#     "private_ip" = "192.168.1.15"
-#     "public_ip" = "130.243.45.67"
-#   }
-#   "webservers" = {
-#     "webserver1" = {
-#       "private_ip" = "192.168.1.12"
-#     }
-#     "webserver2" = {
-#       "private_ip" = "192.168.1.13"
-#     }
-#   }
-# }
-# loadbalancer_private_ip = "192.168.1.15"
-# loadbalancer_public_ip = "130.243.45.67"
-# ssh_loadbalancer = "ssh ubuntu@130.243.45.67"
-# webserver_info = {
-#   "webserver1" = "192.168.1.12"
-#   "webserver2" = "192.168.1.13"
-# }
-# webserver_private_ips = [
-#   "192.168.1.12",
-#   "192.168.1.13",
-# ]
-# website_url = "http://130.243.45.67:8082"
-
-# Testa din webbplats: terraform output -raw website_url
-# SSH till load balancer: terraform output -raw ssh_loadbalancer
-# Få webserver IPs för Ansible: terraform output -json webserver_info
