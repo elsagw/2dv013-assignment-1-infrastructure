@@ -1,0 +1,21 @@
+# Ansible inventory template for Assignment 1
+
+[webservers]
+webserver1 ansible_host=${WEBSERVER1_IP} ansible_ssh_common_args='-o ProxyJump=ubuntu@${LOADBALANCER_PUBLIC_IP} -o StrictHostKeyChecking=no'
+webserver2 ansible_host=${WEBSERVER2_IP} ansible_ssh_common_args='-o ProxyJump=ubuntu@${LOADBALANCER_PUBLIC_IP} -o StrictHostKeyChecking=no'
+
+[loadbalancer]
+lb ansible_host=${LOADBALANCER_PUBLIC_IP}
+
+[all:vars]
+ansible_user=ubuntu
+ansible_ssh_private_key_file=${TF_VAR_identity_file}
+ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
+
+# Port configurations  
+webserver_port=80
+loadbalancer_port=8082
+
+# Variables for nginx template
+webserver1_ip=${WEBSERVER1_IP}
+webserver2_ip=${WEBSERVER2_IP}

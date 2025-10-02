@@ -1,15 +1,29 @@
 # Terraform files
 *.tfstate
 *.tfstate.*
-*.tfvars
 *.tfplan
 .terraform/
 .terraform.lock.hcl
+
+# Terraform variable files with sensitive data
+*.tfvars
+*.tfvars.json
+terraform.auto.tfvars
+
+# Terraform files in subdirectories
+deploy/terraform/*.tfstate
+deploy/terraform/*.tfstate.*
+deploy/terraform/*.tfplan
+deploy/terraform/.terraform/
+deploy/terraform/.terraform.lock.hcl
 
 # Ansible files
 *.retry
 inventory.bak
 inventory-generated
+deploy/ansible/inventory-generated
+deploy/ansible/*.retry
+deploy/ansible/*.log
 
 # SSH keys (if any are created)
 *.pem
@@ -40,4 +54,5 @@ temp/
 *.backup
 *~
 
+# Personal notes and examples
 .exempel.playbook.md
