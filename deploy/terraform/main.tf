@@ -39,23 +39,41 @@ resource "openstack_networking_router_interface_v2" "the_router_interface" {
   subnet_id = openstack_networking_subnet_v2.the_subnet.id
 }
 
-# Create a security group
-resource "openstack_networking_secgroup_v2" "the_secgroup" {
-  name        = var.security_group_name
-  description = "Security group for assignment 1"
+# Webserver security group
+resource "openstack_networking_secgroup_v2" "webserver_secgroup" {
+  name = var.webserver_secgroup_name
+  description = "Security group for webservers"
 }
 
-# Security group rules
-resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_ssh" {
+# Load balancer security group
+resource "openstack_networking_secgroup_v2" "loadbalancer_secgroup" {
+  name = var.loadbalancer_secgroup_name
+  description = "Security group for load balancer"
+}
+
+# Security group SSH webserver
+resource "openstack_networking_secgroup_rule_v2" "webserver_ssh" {
   direction         = "ingress"
   ethertype         = "IPv4"
   protocol          = "tcp"
   port_range_min    = 22
   port_range_max    = 22
   remote_ip_prefix  = "0.0.0.0/0"
-  security_group_id = openstack_networking_secgroup_v2.the_secgroup.id
+  security_group_id = openstack_networking_secgroup_v2.webserver_secgroup.id
 }
 
+# Security group SSH loadbalancer
+resource "openstack_networking_secgroup_rule_v2" "loadbalancer_ssh" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = 22
+  port_range_max    = 22
+  remote_ip_prefix  = "0.0.0.0/0"
+  security_group_id = openstack_networking_secgroup_v2.loadbalancer_secgroup.id
+}
+
+# Security group HTTP webserver
 resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_http" {
   direction         = "ingress"
   ethertype         = "IPv4"
@@ -63,9 +81,10 @@ resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_http" {
   port_range_min    = 80
   port_range_max    = 80
   remote_ip_prefix  = "0.0.0.0/0"
-  security_group_id = openstack_networking_secgroup_v2.the_secgroup.id
+  security_group_id = openstack_networking_secgroup_v2.webserver_secgroup.id
 }
 
+# Security group Load Balancer access
 resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_loadbalancer" {
   direction         = "ingress"
   ethertype         = "IPv4"
@@ -73,7 +92,7 @@ resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_loadbalancer" {
   port_range_min    = 8082
   port_range_max    = 8082
   remote_ip_prefix  = "0.0.0.0/0"
-  security_group_id = openstack_networking_secgroup_v2.the_secgroup.id
+  security_group_id = openstack_networking_secgroup_v2.loadbalancer_secgroup.id
 }
 
 # Create webservers
@@ -83,7 +102,7 @@ resource "openstack_compute_instance_v2" "webservers" {
   image_name      = var.image_name
   flavor_id       = var.flavor_id
   key_pair        = var.key_name
-  security_groups = [openstack_networking_secgroup_v2.the_secgroup.name]
+  security_groups = [openstack_networking_secgroup_v2.webserver_secgroup.name]
 
   network {
     name = openstack_networking_network_v2.the_network.name
@@ -99,7 +118,7 @@ resource "openstack_compute_instance_v2" "loadbalancer" {
   image_name      = var.image_name
   flavor_id       = var.flavor_id
   key_pair        = var.key_name
-  security_groups = [openstack_networking_secgroup_v2.the_secgroup.name]
+  security_groups = [openstack_networking_secgroup_v2.loadbalancer_secgroup.name]
 
   network {
     name = openstack_networking_network_v2.the_network.name
@@ -115,7 +134,7 @@ resource "openstack_networking_port_v2" "webserver_ports" {
   name               = "port_webserver${count.index + 1}"
   network_id         = openstack_networking_network_v2.the_network.id
   admin_state_up     = "true"
-  security_group_ids = [openstack_networking_secgroup_v2.the_secgroup.id]
+  security_group_ids = [openstack_networking_secgroup_v2.webserver_secgroup.id]
   depends_on         = [openstack_networking_subnet_v2.the_subnet]
 }
 
@@ -124,7 +143,7 @@ resource "openstack_networking_port_v2" "loadbalancer_port" {
   name               = "port_loadbalancer"
   network_id         = openstack_networking_network_v2.the_network.id
   admin_state_up     = "true"
-  security_group_ids = [openstack_networking_secgroup_v2.the_secgroup.id]
+  security_group_ids = [openstack_networking_secgroup_v2.loadbalancer_secgroup.id]
   depends_on         = [openstack_networking_subnet_v2.the_subnet]
 }
 

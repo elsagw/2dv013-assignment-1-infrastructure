@@ -43,10 +43,16 @@ variable "external_network_id" {
   default     = "31594641-fec9-4b8c-bb86-32553208d1f3"
 }
 
-variable "security_group_name" {
-  description = "Name of the security group"
+variable "webserver_secgroup_name" {
+  description = "Name of the webserver security group"
   type        = string
-  default     = "assignment1-secgroup"
+  default     = "assignment1-webserver-secgroup"
+}
+
+variable "loadbalancer_secgroup_name" {
+  description = "Name of the load balancer security group"
+  type        = string
+  default     = "assignment1-loadbalancer-secgroup"
 }
 
 variable "image_name" {
