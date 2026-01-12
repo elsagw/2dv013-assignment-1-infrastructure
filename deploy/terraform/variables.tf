@@ -66,3 +66,13 @@ variable "floating_ip_pool" {
   type        = string
   default     = "campus"
 }
+
+variable "webserver_port" {
+  type    = string
+  default = "80"
+}
+
+variable "loadbalancer_port" {
+  type    = string
+  default = "8082"
+}
