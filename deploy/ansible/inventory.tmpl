@@ -11,8 +11,8 @@ ansible_ssh_private_key_file=${TF_VAR_identity_file}
 ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 
 # Port configurations  
-webserver_port=80
-loadbalancer_port=8082
+webserver_port=${WEBSERVER_PORT}
+loadbalancer_port=${LOADBALANCER_PORT}
 
 # Variables for nginx template
 webserver1_ip=${WEBSERVER1_IP}

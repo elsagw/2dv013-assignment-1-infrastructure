@@ -83,6 +83,7 @@ Internet → Load Balancer (Port 8082) → Web Servers (Port 80)
 
      Navigate to project root and run:
      ```sh
+     source .env
      ./deploy.sh
      ```
 
@@ -151,7 +152,7 @@ When you run `./deploy.sh`:
 
      ```sh
      source .env
-     cd deploy/terraform && terraform destroy
+     cd deploy/terraform && terraform destroy -auto-approve
      ```
 
 ## Security Notes

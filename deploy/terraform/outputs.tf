@@ -20,7 +20,7 @@ output "webserver_private_ips" {
 output "webserver_info" {
   description = "Webserver names and their private IP addresses"
   value = {
-    for i in range(2) : 
+    for i in range(2) :
     "webserver${i + 1}" => openstack_networking_port_v2.webserver_ports[i].all_fixed_ips[0]
   }
 }
@@ -28,7 +28,7 @@ output "webserver_info" {
 # Output website URL (convenient for testing)
 output "website_url" {
   description = "URL to access your website"
-  value       = "http://${openstack_networking_floatingip_v2.loadbalancer_floatip.address}:8082"
+  value       = "http://${openstack_networking_floatingip_v2.loadbalancer_floatip.address}:${var.loadbalancer_port}"
 }
 
 # Output SSH command for load balancer (convenient for debugging)
@@ -51,4 +51,10 @@ output "ansible_inventory_info" {
       }
     }
   }
+}
+
+# Output load balancer port (used in deploy script)
+output "loadbalancer_port" {
+  description = "Port for the load balancer"
+  value       = var.loadbalancer_port
 }

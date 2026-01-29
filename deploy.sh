@@ -47,6 +47,7 @@ terraform apply -auto-approve
 echo "Step 2: Getting server IP addresses..."
 LB_PUBLIC_IP=$(terraform output -raw loadbalancer_public_ip)
 LB_PRIVATE_IP=$(terraform output -raw loadbalancer_private_ip)
+LB_PORT=$(terraform output -raw loadbalancer_port)
 
 echo "Server IP addresses:"
 echo "   Load Balancer Public:  $LB_PUBLIC_IP"
@@ -74,6 +75,11 @@ while [ $attempt -le $max_attempts ]; do
     fi
 done
 
+# Step 3b: Wait a bit more for webservers to fully boot
+echo "Step 3b: Waiting for webservers to fully boot..."
+sleep 15
+echo "Webservers should be ready now!"
+
 # Step 4: Run Ansible playbook
 echo "Step 4: Configuring servers with Ansible..."
 cd deploy/ansible
@@ -85,6 +91,6 @@ cd ../../
 echo "All servers configured successfully!"
 echo ""
 echo "Deployment Summary:"
-echo "Your web application is available at: http://$LB_PUBLIC_IP:8082"
+echo "Web application is available at: http://$LB_PUBLIC_IP:$LB_PORT" 
 echo "SSH access: ssh ubuntu@$LB_PUBLIC_IP"
-echo "To destroy: cd deploy/terraform && terraform"
+echo "To destroy: cd deploy/terraform && terraform destroy -auto-approve"

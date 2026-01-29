@@ -41,13 +41,13 @@ resource "openstack_networking_router_interface_v2" "the_router_interface" {
 
 # Webserver security group
 resource "openstack_networking_secgroup_v2" "webserver_secgroup" {
-  name = var.webserver_secgroup_name
+  name        = var.webserver_secgroup_name
   description = "Security group for webservers"
 }
 
 # Load balancer security group
 resource "openstack_networking_secgroup_v2" "loadbalancer_secgroup" {
-  name = var.loadbalancer_secgroup_name
+  name        = var.loadbalancer_secgroup_name
   description = "Security group for load balancer"
 }
 
@@ -156,4 +156,26 @@ resource "openstack_networking_floatingip_v2" "loadbalancer_floatip" {
 resource "openstack_networking_floatingip_associate_v2" "loadbalancer_floatip" {
   floating_ip = openstack_networking_floatingip_v2.loadbalancer_floatip.address
   port_id     = openstack_networking_port_v2.loadbalancer_port.id
+}
+
+# Allow webservers to communicate with each other via SSH
+resource "openstack_networking_secgroup_rule_v2" "webserver_internal_ssh" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = 22
+  port_range_max    = 22
+  remote_group_id   = openstack_networking_secgroup_v2.webserver_secgroup.id
+  security_group_id = openstack_networking_secgroup_v2.webserver_secgroup.id
+}
+
+# Allow load balancer to SSH to webservers (for Ansible ProxyJump)
+resource "openstack_networking_secgroup_rule_v2" "loadbalancer_to_webserver_ssh" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = 22
+  port_range_max    = 22
+  remote_group_id   = openstack_networking_secgroup_v2.loadbalancer_secgroup.id
+  security_group_id = openstack_networking_secgroup_v2.webserver_secgroup.id
 }
