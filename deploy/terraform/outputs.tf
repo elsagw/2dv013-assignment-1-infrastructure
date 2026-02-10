@@ -58,3 +58,13 @@ output "loadbalancer_port" {
   description = "Port for the load balancer"
   value       = var.loadbalancer_port
 }
+
+output "webserver1_private_ip" {
+  description = "Private IP address of webserver1"
+  value       = openstack_networking_port_v2.webserver_ports[0].all_fixed_ips[0]
+}
+
+output "webserver2_private_ip" {
+  description = "Private IP address of webserver2"
+  value       = openstack_networking_port_v2.webserver_ports[1].all_fixed_ips[0]
+}
