@@ -75,11 +75,6 @@ while [ $attempt -le $max_attempts ]; do
     fi
 done
 
-# Step 3b: Wait a bit more for webservers to fully boot
-echo "Step 3b: Waiting for webservers to fully boot..."
-sleep 15
-echo "Webservers should be ready now!"
-
 # Step 4: Run Ansible playbook
 echo "Step 4: Configuring servers with Ansible..."
 cd deploy/ansible
