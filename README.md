@@ -26,7 +26,7 @@ source .env
 ### Option 2: Without `.env`
 
 ```sh
-source eg223ps-2dv013-ht25-openrc.sh
+source ~/path/to/your-openrc.sh
 
 export TF_VAR_key_name="name-keypair"
 export TF_VAR_identity_file="~/.ssh/name.pem"
