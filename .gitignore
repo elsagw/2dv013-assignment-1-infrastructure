@@ -53,3 +53,6 @@ temp/
 # Backup files
 *.backup
 *~
+
+# OpenStack credentials (user-specific)
+eg223ps-2dv013-ht25-openrc.sh

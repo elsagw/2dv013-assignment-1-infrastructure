@@ -102,7 +102,7 @@ resource "openstack_compute_instance_v2" "webservers" {
   image_name      = var.image_name
   flavor_id       = var.flavor_id
   key_pair        = var.key_name
-  security_groups = [openstack_networking_secgroup_v2.webserver_secgroup.name]
+  security_groups = [openstack_networking_secgroup_v2.webserver_secgroup.id]
 
   network {
     name = openstack_networking_network_v2.the_network.name
@@ -118,7 +118,7 @@ resource "openstack_compute_instance_v2" "loadbalancer" {
   image_name      = var.image_name
   flavor_id       = var.flavor_id
   key_pair        = var.key_name
-  security_groups = [openstack_networking_secgroup_v2.loadbalancer_secgroup.name]
+  security_groups = [openstack_networking_secgroup_v2.loadbalancer_secgroup.id]
 
   network {
     name = openstack_networking_network_v2.the_network.name
