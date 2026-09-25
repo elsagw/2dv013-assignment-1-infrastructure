@@ -15,16 +15,6 @@ Infrastructure as Code project that deploys:
 
 ## Deploy
 
-### Option 1: Using `.env`
-
-```sh
-source ~/path/to/your-openrc.sh
-source .env
-./deploy.sh
-```
-
-### Option 2: Without `.env`
-
 ```sh
 source ~/path/to/your-openrc.sh
 

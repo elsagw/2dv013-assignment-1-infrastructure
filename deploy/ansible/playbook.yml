@@ -15,7 +15,7 @@
 # Configure webservers with Apache
 - name: Install and configure Apache webservers
   hosts: webservers
-  become: yes
+  become: true
   tasks:
     - name: Install latest version of Apache2
       apt: 
@@ -41,11 +41,11 @@
     - name: Customize output for the server that delivers it
       ansible.builtin.shell: echo "Content proudly delivered by $(hostname)" >> /var/www/html/index.html
 
-    - name: Ensure Apache listens on port 80
+    - name: Ensure Apache listens on the configured port
       ansible.builtin.lineinfile:
         path: /etc/apache2/ports.conf
         regexp: '^Listen '
-        line: 'Listen 80'
+        line: "Listen {{ webserver_port }}"
       notify: restart-apache
 
     - name: Ensure Apache is running and enabled
@@ -63,7 +63,7 @@
 # Load balancer configuration
 - name: Install and configure Nginx load balancer
   hosts: loadbalancer
-  become: yes
+  become: true
   tasks:
     - name: Install Nginx
       apt:

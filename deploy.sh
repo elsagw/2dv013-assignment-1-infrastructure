@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Deploy script for Assignment 1 - Infrastructure
-set -e
+set -euo pipefail
 
 # Check if we're in the right directory
 if [ ! -f "deploy.sh" ] || [ ! -d "deploy/terraform" ]; then
@@ -11,14 +11,6 @@ if [ ! -f "deploy.sh" ] || [ ! -d "deploy/terraform" ]; then
 fi
 
 echo "Starting Assignment 1 Infrastructure Deployment..."
-
-# Load environment variables if .env exists
-if [ -f .env ]; then
-    echo "Loading environment variables from .env..."
-    source .env
-else
-    echo "Warning: No .env file found. Using system environment variables."
-fi
 
 # Check if required tools are installed
 echo "Checking required tools..."
@@ -40,8 +32,9 @@ if [ ! -d ".terraform" ]; then
     terraform init
 fi
 
-terraform plan
-terraform apply -auto-approve
+terraform plan -out=tfplan
+terraform apply tfplan
+rm -f tfplan
 
 # Step 2: Extract outputs from Terraform
 echo "Step 2: Getting server IP addresses..."
@@ -68,37 +61,47 @@ echo "Step 3: Waiting for SSH on load balancer..."
 max_attempts=30
 attempt=1
 
-while [ $attempt -le $max_attempts ]; do
-    if ssh -i $TF_VAR_identity_file -o ConnectTimeout=5 -o StrictHostKeyChecking=no ubuntu@$LB_PUBLIC_IP "echo 'SSH Ready'" >/dev/null 2>&1; then
+while [ "$attempt" -le "$max_attempts" ]; do
+    if ssh -i "$TF_VAR_identity_file" -o ConnectTimeout=5 -o StrictHostKeyChecking=no ubuntu@"$LB_PUBLIC_IP" "echo 'SSH Ready'" >/dev/null 2>&1; then
         echo "Load balancer SSH ready!"
         break
     else
         echo "   Attempt $attempt/$max_attempts..."
         sleep 10
-        ((attempt++))
+        attempt=$((attempt + 1))
     fi
 done
+
+if [ "$attempt" -gt "$max_attempts" ]; then
+    echo "Error: Load balancer SSH never became ready after $max_attempts attempts"
+    exit 1
+fi
 
 # Step 3b: Wait a bit more for webservers to fully boot
 echo "Step 3b: Waiting for webservers to respond..."
 max_attempts=30
 attempt=1
 
-while [ $attempt -le $max_attempts ]; do
-    if ssh -i $TF_VAR_identity_file \
+while [ "$attempt" -le "$max_attempts" ]; do
+    if ssh -i "$TF_VAR_identity_file" \
            -o ProxyJump="ubuntu@$LB_PUBLIC_IP" \
            -o ConnectTimeout=5 \
            -o StrictHostKeyChecking=no \
-           ubuntu@$WS1_PRIVATE_IP \
+           ubuntu@"$WS1_PRIVATE_IP" \
            "echo 'ready'" >/dev/null 2>&1; then
         echo "Webservers are ready!"
         break
     else
         echo "   Waiting for webservers... (attempt $attempt/$max_attempts)"
         sleep 2
-        ((attempt++))
+        attempt=$((attempt + 1))
     fi
 done
+
+if [ "$attempt" -gt "$max_attempts" ]; then
+    echo "Error: Webservers never became reachable after $max_attempts attempts"
+    exit 1
+fi
 
 # Step 4: Run Ansible playbook
 echo "Step 4: Configuring servers with Ansible..."
@@ -111,6 +114,6 @@ cd ../../
 echo "All servers configured successfully!"
 echo ""
 echo "Deployment Summary:"
-echo "Web application is available at: http://$LB_PUBLIC_IP:$LB_PORT" 
+echo "Web application is available at: http://$LB_PUBLIC_IP:$LB_PORT"
 echo "SSH access: ssh ubuntu@$LB_PUBLIC_IP"
 echo "To destroy: cd deploy/terraform && terraform destroy -auto-approve"
