@@ -1,0 +1,9 @@
+#CREATED AUTOMATICALLY BY TERRAFORM. DO NOT MODIFY THE CONTENT
+
+[server]
+${server_ip}
+
+[all:vars]
+ansible_user=ubuntu
+ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -W %h:%p -q ubuntu@${floating_ip} -o IdentityFile=${identity} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"'
+# USe of IdentifyFile from https://fabianlee.org/2021/05/29/ansible-orchestrating-ssh-access-through-a-bastion-host/

@@ -1,0 +1,158 @@
+---
+
+- name: Configure Database
+  hosts: database
+  become: true
+
+  tasks:
+    - name: Install PostgreSQL and dependencies
+      ansible.builtin.apt:
+        name:
+          - postgresql
+          - postgresql-contrib
+          - python3-psycopg2
+          - acl
+        state: present
+        update_cache: yes
+
+    - name: Configure PostgreSQL to listen on all interfaces
+      ansible.builtin.lineinfile:
+        path: /etc/postgresql/16/main/postgresql.conf
+        regexp: "^#?listen_addresses\\s*=.*"
+        line: "listen_addresses = '*'"
+      notify: Restart PostgreSQL
+
+    - name: Configure pg_hba.conf to allow remote access from private network
+      ansible.builtin.lineinfile:
+        path: /etc/postgresql/16/main/pg_hba.conf
+        line: "host {{ db_name }} {{ db_user }} 0.0.0.0/0 md5"
+      notify: Restart PostgreSQL
+
+    # - name: Set database password
+    #   ansible.builtin.set_fact:
+    #     db_password: "{{ lookup('password', 'credentials/db_password.txt length=20 chars=ascii_letters,digits') }}"
+
+    - name: Generate a dynamic random password
+      ansible.builtin.set_fact:
+        db_password: "{{ lookup('community.general.random_string', length=20, special=false) }}"
+
+    - name: Create database user
+      become_user: postgres
+      community.postgresql.postgresql_user:
+        name: "{{ db_user }}"
+        password: "{{ db_password }}"
+
+    - name: Create database and assign owner
+      become_user: postgres
+      community.postgresql.postgresql_db:
+        name: "{{ db_name }}"
+        owner: "{{ db_user }}"
+
+    - name: Grant schema privileges on public to user
+      become_user: postgres
+      community.postgresql.postgresql_privs:
+        login_db: "{{ db_name }}"
+        type: schema
+        objs: public
+        roles: "{{ db_user }}"
+        privs: ALL
+
+  handlers:
+    - name: Restart PostgreSQL
+      ansible.builtin.service:
+        name: postgresql@16-main
+        state: restarted
+
+
+- name: Configure Web Server & Deploy Web Application
+  hosts: webapp
+  become: true
+
+  tasks:
+    # 1. Base System Dependencies
+    - name: Install system dependencies for Python and venv
+      ansible.builtin.apt:
+        name:
+          - python3-pip
+          - python3-venv
+          - python3-full
+          - libpq-dev
+        state: present
+        update_cache: yes
+
+    # 2. Configuration Files
+    - name: Ensure configuration directory exists
+      ansible.builtin.file:
+        path: /etc/webapp
+        state: directory
+        mode: '0755'
+
+    - name: Create application configuration file
+      ansible.builtin.template:
+        src: config.ini.j2
+        dest: /etc/webapp/config.ini
+        mode: '0600'
+      notify: Restart Web App
+
+    # 3. Virtual Environment & Python Packages
+    - name: Copy requirements.txt
+      ansible.builtin.copy:
+        src: configuration/requirements.txt
+        dest: /opt/requirements.txt
+        mode: '0644'
+
+    - name: Install Python packages in a virtual environment
+      ansible.builtin.pip:
+        requirements: /opt/requirements.txt
+        virtualenv: /opt/webapp/venv
+        virtualenv_command: python3 -m venv
+
+    # 4. Application Code & Templates
+    - name: Copy Web Application Code
+      ansible.builtin.copy:
+        src: app.py
+        dest: /opt/app.py
+        mode: '0644'
+      notify: Restart Web App
+
+    - name: Create templates directory for Flask app
+      ansible.builtin.file:
+        path: /opt/templates
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Deploy application template HTML
+      ansible.builtin.copy:
+        src: data/index.html
+        dest: /opt/templates/index.html
+        owner: root
+        group: root
+        mode: '0644'
+      notify: Restart Web App
+
+    # 5. Service Definition & Management
+    - name: Create Systemd Service for Flask App
+      ansible.builtin.copy:
+        src: configuration/webapp.service
+        dest: /etc/systemd/system/webapp.service
+        owner: root
+        group: root
+        mode: '0644'
+      notify: Restart Web App
+
+    - name: Enable and start Web App service
+      ansible.builtin.systemd:
+        name: webapp
+        daemon_reload: yes
+        state: started
+        enabled: yes
+
+  handlers:
+    - name: Restart Web App
+      ansible.builtin.systemd:
+        name: webapp
+        state: restarted  
+        daemon_reload: true
+        enabled: true

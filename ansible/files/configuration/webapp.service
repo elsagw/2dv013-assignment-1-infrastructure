@@ -1,0 +1,12 @@
+[Unit]
+Description=IaC Flask Application
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/opt
+ExecStart=/opt/webapp/venv/bin/python3 /opt/app.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

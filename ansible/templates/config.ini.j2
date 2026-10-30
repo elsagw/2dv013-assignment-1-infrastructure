@@ -1,0 +1,8 @@
+[database]
+host = {{ db_ip_address }}
+name = {{ db_name }}
+user = {{ db_user }}
+password = {{ hostvars[groups['database'][0]]['db_password'] }}
+
+[server]
+port = {{ app_port }}

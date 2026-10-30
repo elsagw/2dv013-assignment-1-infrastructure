@@ -1,0 +1,14 @@
+#CREATED AUTOMATICALLY BY TERRAFORM. DO NOT MODIFY THE CONTENT
+
+[webapp]
+${webapp_ip}
+
+[database]
+${database_ip}
+
+[webapp:vars]
+db_ip_address=${database_private_ip}
+
+[all:vars]
+ansible_user=ubuntu
+ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'

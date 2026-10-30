@@ -21,6 +21,7 @@ deploy/terraform/.terraform.lock.hcl
 *.retry
 inventory.bak
 inventory-generated
+ansible/inventory
 deploy/ansible/inventory-generated
 deploy/ansible/*.retry
 deploy/ansible/*.log
@@ -56,3 +57,4 @@ temp/
 
 # OpenStack credentials (user-specific)
 eg223ps-2dv013-ht25-openrc.sh
+*openrc*.sh

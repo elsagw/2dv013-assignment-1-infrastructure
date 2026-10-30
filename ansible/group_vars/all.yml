@@ -1,0 +1,8 @@
+---
+# Database Credentials & Settings
+db_name: "appdb"
+db_user: "appuser"
+
+# db_ip_address is NOT set here anymore - it is injected by Terraform into the
+# generated ansible/inventory file under [webapp:vars], since it is the
+# private IP of the `database` server and is only known after it is created.
